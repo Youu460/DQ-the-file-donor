@@ -39,7 +39,7 @@ async def index_files(bot, query):
     await msg.edit(
         "Starting Indexing",
         reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton('Cancel', callback_data='index_cancel')]]
+            [[InlineKeyboardButton('🚫 ᴄᴀɴᴄᴇʟ', callback_data='index_cancel')]]
         )
     )
     try:
@@ -84,11 +84,11 @@ async def send_for_index(bot, message):
     if message.from_user.id in ADMINS:
         buttons = [
             [
-                InlineKeyboardButton('Yes',
+                InlineKeyboardButton('✨ ʏᴇꜱ',
                                      callback_data=f'index#accept#{chat_id}#{last_msg_id}#{message.from_user.id}')
             ],
             [
-                InlineKeyboardButton('close', callback_data='close_data'),
+                InlineKeyboardButton('🚫 ᴄʟᴏꜱᴇ', callback_data='close_data'),
             ]
         ]
         reply_markup = InlineKeyboardMarkup(buttons)
@@ -105,11 +105,11 @@ async def send_for_index(bot, message):
         link = f"@{message.forward_from_chat.username}"
     buttons = [
         [
-            InlineKeyboardButton('Accept Index',
+            InlineKeyboardButton('✨ ʏᴇꜱ',
                                  callback_data=f'index#accept#{chat_id}#{last_msg_id}#{message.from_user.id}')
         ],
         [
-            InlineKeyboardButton('Reject Index',
+            InlineKeyboardButton('🚫 ᴄᴀɴᴄᴇʟ',
                                  callback_data=f'index#reject#{chat_id}#{message.id}#{message.from_user.id}'),
         ]
     ]
@@ -150,8 +150,8 @@ async def index_files_to_db(lst_msg_id, chat, msg, bot):
                     await msg.edit(f"Successfully Cancelled!!\n\nSaved <code>{total_files}</code> files to dataBase!\nDuplicate Files Skipped: <code>{duplicate}</code>\nDeleted Messages Skipped: <code>{deleted}</code>\nNon-Media messages skipped: <code>{no_media + unsupported}</code>(Unsupported Media - `{unsupported}` )\nErrors Occurred: <code>{errors}</code>")
                     break
                 current += 1
-                if current % 20 == 0:
-                    can = [[InlineKeyboardButton('Cancel', callback_data='index_cancel')]]
+                if current % 100000 == 0:
+                    can = [[InlineKeyboardButton('🚫 ᴄᴀɴᴄᴇʟ', callback_data='index_cancel')]]
                     reply = InlineKeyboardMarkup(can)
                     await msg.edit_text(
                         text=f"Total messages fetched: <code>{current}</code>\nTotal messages saved: <code>{total_files}</code>\nDuplicate Files Skipped: <code>{duplicate}</code>\nDeleted Messages Skipped: <code>{deleted}</code>\nNon-Media messages skipped: <code>{no_media + unsupported}</code>(Unsupported Media - `{unsupported}` )\nErrors Occurred: <code>{errors}</code>",
@@ -162,7 +162,7 @@ async def index_files_to_db(lst_msg_id, chat, msg, bot):
                 elif not message.media:
                     no_media += 1
                     continue
-                elif message.media not in [enums.MessageMediaType.VIDEO, enums.MessageMediaType.AUDIO, enums.MessageMediaType.DOCUMENT]:
+                elif message.media not in [enums.MessageMediaType.VIDEO]:
                     unsupported += 1
                     continue
                 media = getattr(message, message.media.value, None)
